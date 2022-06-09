@@ -1,0 +1,27 @@
+[submodule "include/boost"]
+	path = include/boost
+	url = https://github.com/boostorg/boost
+[submodule "include/SDL"]
+	path = include/SDL
+	url = https://github.com/libsdl-org/SDL
+[submodule "include/entt"]
+	path = include/entt
+	url = https://github.com/skypjack/entt
+[submodule "include/magic_enum"]
+	path = include/magic_enum
+	url = https://github.com/Neargye/magic_enum
+[submodule "include/fmtlog"]
+	path = include/fmtlog
+	url = https://github.com/MengRao/fmtlog
+[submodule "include/fmt"]
+	path = include/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "include/args"]
+	path = include/args
+	url = https://github.com/Taywee/args
+[submodule "include/cpp-typelist"]
+	path = include/cpp-typelist
+	url = https://github.com/lipk/cpp-typelist
+[submodule "core"]
+	path = core
+	url = https://github.com/kcalbCube/mirage-core
