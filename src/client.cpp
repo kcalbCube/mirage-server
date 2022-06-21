@@ -47,7 +47,7 @@ namespace mirage::server
 
 	void Client::initialize(network::server::NewConnectionEvent& event)
 	{
-		connection = network::server::networkController()
+		connection = *network::server::networkController()
 			.getConnection(event.username);
 	
 		event::triggerEvent<ClientAuthorizationRequestEvent>(entity);
