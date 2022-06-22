@@ -8,7 +8,8 @@
 #include <core/network.h>
 mirage::graphics::IconLoader::result_type 
 	mirage::graphics::IconLoader::operator()(const std::string& path, entt::id_type id)
-{	
+{
+	logi("loading icon {}", path);
 	return operator()(SDL_LoadBMP(path.c_str()), id);
 }
 
@@ -18,10 +19,17 @@ mirage::graphics::IconLoader::result_type
 	return std::make_shared<IconResource>(surface, 1.f, id);	
 }
 
-mirage::graphics::IconRequestsResponder::ResponderProcess::ResponderProcess(entt::entity entity)
-	: parent{entity} {}
+entt::resource<mirage::graphics::IconResource> mirage::graphics::load(entt::id_type id, const std::string& path)
+{
+	return iconCache().load(id, path, id).first->second; 
+}
 
-void mirage::graphics::IconRequestsResponder::ResponderProcess::update(unsigned int, void *)
+entt::resource<mirage::graphics::IconResource> mirage::graphics::load(entt::id_type id, SDL_Surface* surface)
+{
+	return iconCache().load(id, surface, id).first->second;
+}
+
+void mirage::graphics::IconRequestsResponder::ResponderProcess::update(float delta)
 {
 	decltype(parent->queue) mqueue;
 	mqueue.merge(parent->queue);
@@ -60,7 +68,7 @@ void mirage::graphics::IconRequestsResponder::onRequest(
 
 void mirage::graphics::IconRequestsResponder::initialize(void)
 {
-	startProcess<ResponderProcess>(mirage::ecs::processing::PeriodMS<5>::getInstance(), entity);
+	startProcess<ResponderProcess>(mirage::ecs::processing::PeriodMS<5>::getInstance());
 }
 
 void mirage::graphics::IconRequestsResponder::lateInitialize(void)

@@ -22,9 +22,9 @@ namespace game
 		{
 			mirage::network::GraphicFrame::SerializedT frame{};
 			mirage::graphics::VerticeGroup vg;
-			auto icon = mirage::graphics::iconCache().load("1.bmp"_hs, "resource/1.bmp", "1.bmp"_hs);	
+			auto icon = mirage::graphics::load("1.bmp"_hs, "resource/1.bmp");	
 
-			vg.vertices.emplace_back(static_cast<uint16_t>(x * UINT16_MAX), static_cast<uint16_t>(y * UINT16_MAX), icon.first->second->id);
+			vg.vertices.emplace_back(static_cast<uint16_t>(x * UINT16_MAX), static_cast<uint16_t>(y * UINT16_MAX), icon->id);
 
 			frame.push_back(vg);	
 

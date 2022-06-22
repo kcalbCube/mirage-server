@@ -19,16 +19,16 @@ namespace mirage::graphics
 	using IconCache = entt::resource_cache<IconResource, IconLoader>;
 	MIRAGE_COFU(IconCache, iconCache);
 
+	entt::resource<IconResource> load(entt::id_type id, const std::string& path);	
+	entt::resource<IconResource> load(entt::id_type id, SDL_Surface* surface);
+
 	struct IconRequestsResponder : 
 		ecs::Component<IconRequestsResponder>,
 		ecs::Processing<IconRequestsResponder>
 	{
-		struct ResponderProcess : Process<ResponderProcess, unsigned>
+		struct ResponderProcess : Process<ResponderProcess>
 		{
-			ecs::ComponentWrapper<IconRequestsResponder> parent;
-			ResponderProcess(entt::entity);
-
-			void update(unsigned, void*);
+			void update(float delta);
 		};
 
 		std::map<std::string, std::vector<Icon>> queue;

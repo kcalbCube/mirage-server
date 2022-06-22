@@ -9,15 +9,11 @@ class ClientAuthorization :
 {	
 public:
 	mirage::ecs::ComponentWrapper<mirage::server::Client> client;
-	struct AuthorizationProcess : Process<AuthorizationProcess, unsigned>
+	struct AuthorizationProcess : Process<AuthorizationProcess>
 	{
-		mirage::ecs::ComponentWrapper<ClientAuthorization> parent;
-		AuthorizationProcess(entt::entity entity)
-			: parent(entity) {}
-
 		int counter = 0;
-		void update(unsigned delta, void*);
-		void failed(void);
+		void update(float delta);
+		void onFail(void);
 	};
 
 	void onPacket(mirage::network::server::PacketReceivedEvent<mirage::network::MessageSent>&);
