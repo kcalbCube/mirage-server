@@ -40,7 +40,7 @@ namespace game
 		{
 			if(packet.username != client->getUsername())
 				return;
-			switch(toupper(packet.packet.view()[0]))
+			switch(toupper(mirage::utils::stringView(packet.packet.message)[0]))
 			{
 			case 'W':
 				y -= 0.1f;

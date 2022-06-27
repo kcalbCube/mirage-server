@@ -35,7 +35,7 @@ void ClientAuthorization::onPacket(
 	if(packet.username != client->getUsername())
 		return;
 
-	if(packet.packet.view() == "kcalbCubinho")
+	if(mirage::utils::stringView(packet.packet.message) == "kcalbCubinho")
 	{
 		client->sendMessage("Authorized.");	
 		mirage::event::triggerEvent<mirage::server::ClientAuthorizationConfirmedEvent>

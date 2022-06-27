@@ -65,7 +65,7 @@ namespace mirage::network::server
 			const InitializeConnection& packet)
 	{
 		auto username = utils::sanitizeUsername(
-				utils::stringView(packet.username, usernameMax));
+				std::string(utils::stringView(packet.username)));
 
 		if(auto&& connectionPtr = getConnection(username); connectionPtr)
 		{
