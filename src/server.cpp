@@ -57,6 +57,9 @@ namespace mirage::network::server
 		event::enqueueEvent<NewConnectionEvent>(connection->username);
 
 		connection->activated = true;
+
+		ConnectionResponce cr {.responce = ConnectionResponce::success};
+		send(*connection, AbstractPacket{cr});
 	}
 
 
@@ -77,14 +80,13 @@ namespace mirage::network::server
 		}
 
 		auto& ptr = connections.emplace_back(
-			std::move(
 				boost::make_shared<Connection>(
 					boost::make_shared<TCPConnection>(ioContext()),
 					endpoint,
 					username,
 					false
 				)
-			)
+			
 		);
 			
 		auto& con = *ptr;
@@ -133,6 +135,11 @@ namespace mirage::network::server
 
 		switch(packet.packet->id)
 		{
+			case PacketId::input:
+				event::enqueueEvent<PacketReceivedEvent<Input>>(
+					std::move(username),
+					packetCast<Input>(packet));
+				break;
 			case PacketId::message:
 				event::enqueueEvent<PacketReceivedEvent<MessageSent>>(
 						std::move(username),

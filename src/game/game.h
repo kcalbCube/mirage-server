@@ -4,6 +4,7 @@
 #include "../server.h"
 #include "../client.h"
 #include "../graphics.h"
+#include "core/utility.h"
 #include <core/processing.h>
 
 using namespace entt::literals;
@@ -36,26 +37,30 @@ namespace game
 				mirage::network::AbstractPacket{framePacket});
 		}
 
-		void onMessage(mirage::network::server::PacketReceivedEvent<mirage::network::MessageSent>& packet)
+		void onInput(mirage::network::server::PacketReceivedEvent<mirage::network::Input>& packet)
 		{
 			if(packet.username != client->getUsername())
 				return;
-			switch(toupper(mirage::utils::stringView(packet.packet.message)[0]))
+			auto deserialized = mirage::utils::deserialize<mirage::network::Input::SerializedT>(
+				std::string{mirage::utils::span(packet.packet.serialized)});
+			for(auto&& key : deserialized)
 			{
-			case 'W':
-				y -= 0.1f;
-				break;
-			case 'S':
-				y += 0.1f;
-				break;
-			case 'A':
-				x -= 0.1f;
-				break;
-			case 'D':
-				x += 0.1f;
-				break;
-			default:
-				return;
+				switch(key)
+				{
+				case SDL_SCANCODE_W:
+					y -= 0.01f;
+					break;
+				case SDL_SCANCODE_S:
+					y += 0.01f;
+					break;
+				case SDL_SCANCODE_D:
+					x += 0.01f;
+					break;
+				case SDL_SCANCODE_A:
+					x -= 0.01f;
+					break;
+				default: break;
+				}
 			}
 
 			sendFrame();
@@ -68,7 +73,7 @@ namespace game
 
 		void lateInitialize(void)
 		{
-			bindEvent<mirage::network::server::PacketReceivedEvent<mirage::network::MessageSent>, &SimpleGame::onMessage>();
+			bindEvent<mirage::network::server::PacketReceivedEvent<mirage::network::Input>, &SimpleGame::onInput>();
 		}
 	};
 	MIRAGE_CREATE_WITH_EVENT(
