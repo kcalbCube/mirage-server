@@ -2,6 +2,8 @@
 #include <core/ecs.h>
 #include <core/network.h>
 #include "core/event.h"
+#include "core/packet.h"
+#include <core/utility.h>
 #include "server.h"
 #include <boost/bind.hpp>
 namespace mirage::server
@@ -53,10 +55,21 @@ namespace mirage::server
 		event::triggerEvent<ClientAuthorizationRequestEvent>(entity);
 	}
 
+	void Client::onClientInformation(network::server::PacketReceivedEvent<network::ClientInformationUpdate>& packet)
+	{
+		if(packet.username != getUsername())
+			return;
+		auto deserialized = utils::deserialize<network::ClientInformationUpdate::SerializedT>(std::string{utils::span(packet.packet.serialized)});
+
+		windowWidth = deserialized.screenWidth;
+		windowHeight = deserialized.screenHeight;
+	}
+
 	void Client::lateInitialize(void)
 	{
 		bindEvent<ClientAuthorizationBlockedEvent, &Client::authorizationBlocked>();
 		bindEvent<ClientAuthorizationConfirmedEvent, &Client::authorizationConfirmed>();
+		bindEvent<network::server::PacketReceivedEvent<network::ClientInformationUpdate>, &Client::onClientInformation>();
 	}
 
 	void Client::sendMessage(std::string_view str)

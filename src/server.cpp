@@ -150,6 +150,11 @@ namespace mirage::network::server
 						std::move(username),
 						packetCast<ResourceRequest>(packet));
 				break;
+			case PacketId::clientInfo:
+				event::enqueueEvent<PacketReceivedEvent<ClientInformationUpdate>>(
+						std::move(username),
+						packetCast<ClientInformationUpdate>(packet));
+				break;
 			default:
 			{
 				event::enqueueEvent<PacketReceivedEvent<AbstractPacket>>(

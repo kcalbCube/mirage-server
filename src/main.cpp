@@ -1,10 +1,12 @@
 #include <core/mirage.h>
 #include <core/json.h>
 #include <boost/json/src.hpp>
+#include "SDL_image.h"
 #include "config.h"
 #include "server.h"
 #include "client.h"
 #include "game/game.h"
+#include <SDL_image.h>
 
 void readConfig(void)
 {
@@ -15,6 +17,10 @@ void readConfig(void)
 #undef main
 int main(int, char**)
 {
+	SDL_Init(SDL_INIT_EVERYTHING);
+	IMG_Init(IMG_INIT_PNG);
+
+
 	// readConfig();
 	fmtlog::setLogLevel(fmtlog::DBG);
 	fmtlog::startPollingThread();		

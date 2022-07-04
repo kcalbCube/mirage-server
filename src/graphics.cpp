@@ -6,11 +6,23 @@
 #include "src/server.h"
 #include <cstring>
 #include <core/network.h>
+#include <SDL_image.h>
+
 mirage::graphics::IconLoader::result_type 
 	mirage::graphics::IconLoader::operator()(const std::string& path, entt::id_type id)
 {
 	logi("loading icon {}", path);
-	return operator()(SDL_LoadBMP(path.c_str()), id);
+	auto img = IMG_Load(path.c_str());
+
+	if(img == nullptr)
+	{
+		auto error = SDL_GetError();
+		loge("Failed loading icon '{}' id {}: {}", path, id, error);
+
+		throw std::runtime_error(error);
+	}
+
+	return operator()(img, id);
 }
 
 mirage::graphics::IconLoader::result_type 

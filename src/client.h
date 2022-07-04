@@ -1,6 +1,7 @@
 #pragma once
 #include <core/ecs.h>
 #include <core/event.h>
+#include "core/packet.h"
 #include "server.h"
 #include <functional>
 #include <string>
@@ -34,8 +35,14 @@ namespace mirage::server
 		bool authorized = false;
 
 		void authorizationBlocked(ClientAuthorizationBlockedEvent&);
-		void authorizationConfirmed(ClientAuthorizationConfirmedEvent&);	
+		void authorizationConfirmed(ClientAuthorizationConfirmedEvent&);
+
+		void onClientInformation(network::server::PacketReceivedEvent<network::ClientInformationUpdate>&);
+
 	public:
+		uint16_t windowWidth = 0,
+			 windowHeight = 0;
+
 		const network::server::Connection& getConnection(void) const;
 		std::string_view getUsername(void) const;
 

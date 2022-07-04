@@ -25,3 +25,6 @@
 [submodule "core"]
 	path = core
 	url = https://github.com/kcalbCube/mirage-core
+[submodule "include/SDL_image"]
+	path = include/SDL_image
+	url = https://github.com/libsdl-org/SDL_image
