@@ -5,13 +5,13 @@ void game::SimpleGame::sendFrame(void)
 	mirage::network::GraphicFrame::SerializedT frame{};
 	mirage::graphics::VerticeGroup vg;
 	auto w = client->windowWidth;
-	auto h = client->windowHeight;
-
-	auto cropX = w - 64 * width;
-	auto cropY = h - 64 * height;
+	auto h = client->windowHeight;	
 
 	auto scaleX = static_cast<float>(w) / (width * 64);
 	auto scaleY = static_cast<float>(h) / (height * 64);
+
+	auto cropX = static_cast<unsigned>(w - 64 * scaleX * width);
+	auto cropY = static_cast<unsigned>(h - 64 * scaleY * height);
 
 	vg.filters.emplace_back(mirage::graphics::Scale(
 		static_cast<unsigned>(scaleX), static_cast<unsigned>(scaleY)));
@@ -29,11 +29,11 @@ void game::SimpleGame::sendFrame(void)
 			for(uint16_t y = 0; y < height; ++y)
 				vg.vertices.emplace_back(
 					sx + x * dx + dx / 2, 
-					sy + y * (dy - 1) + dy / 2, 
+					sy + y * dy + dy / 2, 
 					tile->id);
 	}
 
-	vg.vertices.emplace_back(x, y, icon->id);
+	vg.vertices.emplace_back(x, y, icon->id, 1, 1, 1);
 
 
 	frame.push_back(vg);	

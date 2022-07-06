@@ -18,14 +18,17 @@ void readConfig(void)
 int main(int, char**)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	IMG_Init(IMG_INIT_PNG);
-
+	IMG_Init(IMG_INIT_PNG);	
 
 	// readConfig();
 	fmtlog::setLogLevel(fmtlog::DBG);
 	fmtlog::startPollingThread();		
 	mirage::network::server::networkController().start();	
 	mirage::ioContext().run();
-	for(;;);
+	while(true)
+	{
+		std::this_thread::yield();
+		std::this_thread::sleep_for(std::chrono::seconds(10));
+	}
 	return mirage::version;
 }
